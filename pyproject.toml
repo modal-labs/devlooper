@@ -1,0 +1,10 @@
+[tool.black]
+line-length = 120
+
+[tool.ruff]
+ignore = ['E501', 'E741']
+select = ['E', 'F', 'W', 'I']
+
+[tool.ruff.isort]
+combine-as-imports = true
+known-third-party = ["modal"]

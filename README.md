@@ -2,10 +2,10 @@
 
 `devlooper` is a program synthesis agent that autonomously fixes its output by running tests!
 
-Here's `devlooper` in action, generating a tic-tac-toe app in React:
+Here's `devlooper` in action, taking 11 iterations to create a Python library that generates voronoi diagrams:
 
 <p align="center">
-  <img width="800" alt="autonomous tic-tac-toe" src="https://github.com/modal-labs/smol-devlooper/assets/5786378/c07e0681-8fdb-46a9-b3dd-0e12baed9141">
+  <img width="800" alt="devlooper demo" src="https://github.com/modal-labs/devlooper/assets/5786378/0dfa6086-96e2-484b-92c8-23d1017471ab">
 </p>
 
 ## ⚙️ How it works

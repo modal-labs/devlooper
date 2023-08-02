@@ -5,7 +5,7 @@
 Here's `devlooper` in action, taking 11 iterations to create a Python library that generates voronoi diagrams:
 
 <p align="center">
-  <img width="800" alt="devlooper demo" src="https://github.com/modal-labs/devlooper/assets/5786378/0dfa6086-96e2-484b-92c8-23d1017471ab">
+  <img width="600" alt="devlooper demo" src="https://github.com/modal-labs/devlooper/assets/5786378/0dfa6086-96e2-484b-92c8-23d1017471ab">
 </p>
 
 ## ⚙️ How it works

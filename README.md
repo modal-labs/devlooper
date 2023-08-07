@@ -24,7 +24,7 @@ However, any language/framework should work, as long as it can be installed with
 
 ### 🏖️ Sandbox
 
-We use [Modal](http://modal.com/)'s new [Sandbox](https://modal.com/docs/guide/sandbox) primitive to run tests in an isolated invornment and fetch the output. This allows us to construct the image incrementally as well (similar to building up a Dockerfile in layers that are cached).
+We use [Modal](http://modal.com/)'s new [Sandbox](https://modal.com/docs/guide/sandbox) primitive to run tests in an isolated environment and fetch the output. This allows us to construct the image incrementally as well (similar to building up a Dockerfile in layers that are cached).
 
 ### 🤖 Debug loop
 

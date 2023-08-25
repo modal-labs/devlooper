@@ -40,7 +40,7 @@ TEMPLATES = {
         test_cmd="cargo test",
         workdir="/app",
         image=(
-            # modal.Image.from_dockerhub("rust:slim", setup_modal_client=False)
+            # modal.Image.from_registry("rust:slim", setup_modal_client=False)
             modal.Image._from_args(dockerfile_commands=["FROM rust:slim"])
             .apt_install("build-essential")
             .run_commands("cargo new app --bin")
@@ -61,7 +61,7 @@ TEMPLATES = {
         test_cmd="yarn run jest --bail",
         workdir="/app",
         image=(
-            # modal.Image.from_dockerhub("node:slim", setup_modal_client=False)
+            # modal.Image.from_registry("node:slim", setup_modal_client=False)
             modal.Image._from_args(dockerfile_commands=["FROM node:slim"])
             .run_commands("yarn create vite app --template react")
             .workdir("/app")

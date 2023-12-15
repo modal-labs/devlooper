@@ -28,7 +28,7 @@ stub = modal.Stub("devlooper")
 devlooper_image = (
     modal.Image.debian_slim(python_version="3.11")
     .apt_install("git")
-    .pip_install("git+https://github.com/smol-ai/developer.git@67c254bc703c645dd532ac0f665440b52de5038a")
+    .pip_install("git+https://github.com/smol-ai/developer.git")
     .pip_install("colorama")
 )
 
@@ -56,7 +56,7 @@ def run_in_sandbox(state: State, template: EnvTemplate) -> Tuple[int, str, str]:
     for package_list in state.package_layers:
         image = template.install_packages(image, package_list)
 
-    sb = stub.app.spawn_sandbox(
+    sb = stub.spawn_sandbox(
         "bash",
         "-c",
         template.test_cmd,
@@ -81,7 +81,7 @@ def run_in_sandbox(state: State, template: EnvTemplate) -> Tuple[int, str, str]:
     secrets=[modal.Secret.from_name("openai-secret")],
     timeout=30 * 60,  # 30 minutes
 )
-async def devlooper(input_prompt: str, template_name: str, model: str = "gpt-4") -> State:
+async def devlooper(input_prompt: str, template_name: str, model: str = "gpt-4-1106-preview") -> State:
     from smol_dev.prompts import generate_code, plan, specify_file_paths
 
     from .display import print_diff, print_info, print_section_header
@@ -190,8 +190,8 @@ def main(
     template: str = "react",
     output_path: str = "output",
 ):
-    for i, state in devlooper.call(prompt, template):
-        path = Path(output_path) / stub.app.app_id / str(i)
+    for i, state in devlooper.remote_gen(prompt, template):
+        path = Path(output_path) / stub.app_id / str(i)
 
         print("Writing files to", path.absolute())
         write_files(state.code, path)

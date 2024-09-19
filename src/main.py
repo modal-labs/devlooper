@@ -23,7 +23,7 @@ class State:
         return f"{self.input_prompt}\n\nAssume you have these packages installed: {packages}"
 
 
-stub = modal.Stub("devlooper")
+app = modal.App("devlooper")
 
 devlooper_image = (
     modal.Image.debian_slim(python_version="3.11")
@@ -56,7 +56,7 @@ def run_in_sandbox(state: State, template: EnvTemplate) -> Tuple[int, str, str]:
     for package_list in state.package_layers:
         image = template.install_packages(image, package_list)
 
-    sb = stub.spawn_sandbox(
+    sb = modal.Sandbox.create(
         "bash",
         "-c",
         template.test_cmd,
@@ -67,7 +67,7 @@ def run_in_sandbox(state: State, template: EnvTemplate) -> Tuple[int, str, str]:
                 remote_path=template.workdir,
             )
         ],
-        timeout=60,  # 1 minute
+        timeout=120,
         workdir=template.workdir,
     )
 
@@ -76,7 +76,7 @@ def run_in_sandbox(state: State, template: EnvTemplate) -> Tuple[int, str, str]:
     return (sb.returncode, sb.stdout.read(), sb.stderr.read())
 
 
-@stub.function(
+@app.function(
     image=devlooper_image,
     secrets=[modal.Secret.from_name("openai-secret")],
     timeout=30 * 60,  # 30 minutes
@@ -110,7 +110,7 @@ async def devlooper(input_prompt: str, template_name: str, model: str = "gpt-4-1
     state = State(input_prompt=input_prompt, code={}, package_layers=[initial_packages], run_commands=[])
 
     print_section_header("Generating file paths...")
-    file_paths = specify_file_paths(state.prompt(), current_plan)
+    file_paths = specify_file_paths(state.prompt(), current_plan, model=model)
     print(file_paths)
 
     # OpenAI rate limits make this necessary.
@@ -184,14 +184,14 @@ async def devlooper(input_prompt: str, template_name: str, model: str = "gpt-4-1
     print_section_header("Success!")
 
 
-@stub.local_entrypoint()
+@app.local_entrypoint()
 def main(
     prompt: str = "Create a Tic-Tac-Toe game.",
     template: str = "react",
     output_path: str = "output",
 ):
     for i, state in devlooper.remote_gen(prompt, template):
-        path = Path(output_path) / stub.app_id / str(i)
+        path = Path(output_path) / app.app_id / str(i)
 
         print("Writing files to", path.absolute())
         write_files(state.code, path)
